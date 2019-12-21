@@ -1,25 +1,22 @@
-import io
-from pdfminer.converter import TextConverter
-from pdfminer.pdfinterp import PDFPageInterpreter, PDFResourceManager
-from pdfminer.pdfpage import PDFPage
- 
+from text_process import *
+import spacy
 
-def extract_text_from_pdf(pdf_path):
-    resource_manager = PDFResourceManager()
-    text_stream = io.StringIO()
-    converter = TextConverter(resource_manager, text_stream)
-    page_interpreter = PDFPageInterpreter(resource_manager, converter)
- 
-    with open(pdf_path, 'rb') as fh:
-        for page in PDFPage.get_pages(fh, 
-                                      caching=True,
-                                      check_extractable=True):
-            page_interpreter.process_page(page)
- 
-        text = text_stream.getvalue()
- 
-    converter.close()
-    text_stream.close()
- 
-    if text:
-        return text
+
+def main():
+    pdf_path = input("Enter file path: ")
+    data = TextProcess(pdf_path)
+    data.extract_text_from_pdf()
+    data.ie_preprocess()
+
+    print("pdf pre-processing completed. \n")
+
+    ent_request = ""
+
+    while ent_request != "exit":
+        ent_request = input("Enter entity: ")
+        data.ent_preprocess(ent_request)
+    return
+
+
+if __name__=='__main__':
+    main()
