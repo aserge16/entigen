@@ -43,6 +43,7 @@ class TextProcess():
             for span in self.spans:
                 retokenizer.merge(span)
 
+
     def ent_preprocess(self, request):
         self.ent_indexes = []
         for ent in self.spans:
@@ -50,14 +51,8 @@ class TextProcess():
                 self.ent_indexes.append(ent.start)
 
         self.ent_sentences = []
-        end_marks = ['.', '?', '!', '‘', '’', '"']
         for i in self.ent_indexes:
-            sentence = []
-            j = i - 1
-            while self.doc[j].text not in end_marks:
-                sentence.insert(0, self.doc[j])
-                j -= 1
-            while self.doc[i].text not in end_marks:
-                sentence.append(self.doc[i])
-                i += 1
+            token_span = doc[i:i+1]
+            sentence = token_span.sent
             self.ent_sentences.append(sentence)
+        self.ent_sentences = list(dict.fromkeys(self.ent_sentences))
