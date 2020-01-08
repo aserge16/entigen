@@ -1,5 +1,4 @@
 import io
-import pprint
 import spacy
 from pdfminer.converter import TextConverter
 from pdfminer.pdfinterp import PDFPageInterpreter, PDFResourceManager

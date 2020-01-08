@@ -1,5 +1,4 @@
 from text_process import *
-import spacy
 
 
 def main():
@@ -15,7 +14,6 @@ def main():
     while ent_request != "exit":
         ent_request = input("Enter entity: ")
         data.ent_preprocess(ent_request)
-    return
 
 
 if __name__=='__main__':

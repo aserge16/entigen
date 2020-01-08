@@ -26,9 +26,9 @@ def process_file(input_path):
     return sentences, labels
 
 
-def get_sentences_labels(input_path_1, input_path_2):
-    sentences, labels = process_file(input_path_1)
-    sentences_2, labels_2 = process_file(input_path_2)
+def get_sentences_labels(train_data_path, test_data_path):
+    sentences, labels = process_file(train_data_path)
+    sentences_2, labels_2 = process_file(test_data_path)
 
     sentences.extend(sentences_2)
     labels.extend(labels_2)
@@ -36,7 +36,9 @@ def get_sentences_labels(input_path_1, input_path_2):
     return sentences, labels
 
 
-def create_training_data(sentences, labels, num_words, max_len):
+def create_training_data(train_data_path, test_data_path, num_words, max_len):
+    sentences, labels = get_sentences_labels(train_data_path, test_data_path)
+
     t = Tokenizer(num_words=num_words)
     t.fit_on_texts(sentences)
     sequences = t.texts_to_sequences(sentences)
@@ -46,7 +48,7 @@ def create_training_data(sentences, labels, num_words, max_len):
     lb = LabelBinarizer()
     labels = np.array(labels)
     train_labels = lb.fit_transform(labels)
-    
+
     sent_train, sent_test, label_train, label_test = train_test_split(train_data , train_labels, test_size=0.20, random_state=42)
 
     return sent_train, sent_test, label_train, label_test
