@@ -51,7 +51,7 @@ class TextProcess():
 
         self.ent_sentences = []
         for i in self.ent_indexes:
-            token_span = doc[i:i+1]
+            token_span = self.doc[i:i+1]
             sentence = token_span.sent
             self.ent_sentences.append(sentence)
         self.ent_sentences = list(dict.fromkeys(self.ent_sentences))
