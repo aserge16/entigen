@@ -1,10 +1,14 @@
 from pprint import pprint
-from keras_model import *
-from semval_data_process import *
+import json
+import os
+import numpy as np
+import random
+import torch
 import spacy
 
+
 def test():
-    with open('chp.txt', 'r') as fh:
+    with open('../resources/chp.txt', 'r') as fh:
         text = fh.read()
 
     nlp = spacy.load("en_core_web_sm")
@@ -30,17 +34,13 @@ def test():
     ent_sentences = list(dict.fromkeys(ent_sentences))
 
     print(ent_sentences[6].ents)
-    print(ent_sentences[6].noun_chunks)
-    # for i in range(9):g
-    # es[i], i)
+    print(ent_sentences[6])
+    
+
+    # for sen in ent_sentences:
+
 
 
 if __name__=='__main__':
-    num_words = 20000
-    embedding_size = 300
-    max_len = 64   
-    label_len = 19
-    train_path = "semval/training/TRAIN_FILE.TXT"
-    test_path = "semval/testing_keys/TEST_FILE_FULL.TXT"
-
-    test()
+    test2('../MLMAN/checkpoint/MLMAN9225954.pth.tar')
+    # test()
