@@ -18,7 +18,7 @@ def process_file(input_path):
         sentence = line[start_sent+1:len(line) - 2]
         sentence = sentence.replace("<e1>", "E1_START ").replace("</e1>", " E1_END")
         sentence = sentence.replace("<e2>", "E2_START ").replace("</e2>", " E2_END")
-        label = lines[i+1].rstrip()
+        label = lines[i+1].rstrip().split("(")[0]
 
         sentences.append(sentence)
         labels.append(label)
@@ -51,4 +51,4 @@ def create_training_data(train_data_path, test_data_path, num_words, max_len):
 
     sent_train, sent_test, label_train, label_test = train_test_split(train_data , train_labels, test_size=0.15, random_state=42)
 
-    return sent_train, sent_test, label_train, label_test
+    return sent_train, sent_test, label_train, label_test, t
