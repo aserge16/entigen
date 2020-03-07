@@ -21,7 +21,7 @@ def create_model(num_words, embedding_size, max_len, label_len, word_index, embe
     #     model.add(Embedding())
 
     model.add(Embedding(num_words, embedding_size, input_length=max_len))
-    model.add(Bidirectional(LSTM(units=128, dropout=0.2, recurrent_dropout=0.2, return_sequences=True)))
+    model.add(Bidirectional(LSTM(units=128, dropout=0.2, recurrent_dropout=0.2)))
     model.add(Dense(32, activation='relu'))
     model.add(Dense(label_len, activation='softmax'))
 
