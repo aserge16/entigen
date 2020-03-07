@@ -9,10 +9,12 @@ from pdfminer.pdfpage import PDFPage
 class TextProcess():
     def __init__(self, text_path, PDF=False):
         self.text_path = text_path
+        print("Extracting text...")
         if PDF:
             self.extract_text_from_pdf()
         else:
             self.extract_text_from_doc()
+        print("Text sucessfully extracted")
 
 
     def extract_text_from_pdf(self):
@@ -42,6 +44,7 @@ class TextProcess():
 
 
     def ie_preprocess(self):
+        print("Tokenizing text...")
         nlp = spacy.load("en_core_web_sm")
         self.doc = nlp(self.text)
 
@@ -54,6 +57,7 @@ class TextProcess():
 
 
     def ent_preprocess(self, request):
+        print("Gathering sentences with entity %s" % (request))
         self.ent_indexes = []
         for ent in self.spans:
             if ent.text == request:
@@ -85,6 +89,6 @@ class TextProcess():
 
         self.ent_sentences = list(dict.fromkeys(self.ent_sentences))
         
-        with open("./temp_sentences.txt", 'w+') as fh:
+        with open("./data/temp_sentences.txt", 'w+') as fh:
             for s in self.ent_sentences:
                 fh.write(s)
