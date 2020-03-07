@@ -5,7 +5,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelBinarizer
 
 
-def process_file(input_path):
+def get_sentences_labels(input_path):
     sentences = []
     labels = []
 
@@ -26,18 +26,12 @@ def process_file(input_path):
     return sentences, labels
 
 
-def get_sentences_labels(train_data_path, test_data_path):
-    sentences, labels = process_file(train_data_path)
-    sentences_2, labels_2 = process_file(test_data_path)
+def create_training_data(train_data_path, test_data_path, num_words, max_len, test_size):
+    sentences, labels = get_sentences_labels(train_data_path)
+    sentences_2, labels_2 = get_sentences_labels(test_data_path)
 
     sentences.extend(sentences_2)
     labels.extend(labels_2)
-
-    return sentences, labels
-
-
-def create_training_data(train_data_path, test_data_path, num_words, max_len):
-    sentences, labels = get_sentences_labels(train_data_path, test_data_path)
 
     t = Tokenizer(num_words=num_words)
     t.fit_on_texts(sentences)
@@ -48,7 +42,25 @@ def create_training_data(train_data_path, test_data_path, num_words, max_len):
     lb = LabelBinarizer()
     labels = np.array(labels)
     train_labels = lb.fit_transform(labels)
+    seen = {}
+    for i in range(len(labels)):
+        if labels[i] in seen:
+            continue
+        else:
+            seen[labels[i]] = train_labels[i]
 
-    sent_train, sent_test, label_train, label_test = train_test_split(train_data , train_labels, test_size=0.15, random_state=42)
+    sent_train, sent_test, label_train, label_test = train_test_split(train_data , train_labels, test_size=test_size, random_state=42)
 
     return sent_train, sent_test, label_train, label_test, t
+
+
+def create_model_data(data_path, num_words, max_len):
+    sentences, labels = get_sentences_labels(data_path)
+
+    t = Tokenizer(num_words=num_words)
+    t.fit_on_texts(sentences)
+    sequences = t.texts_to_sequences(sentences)
+
+    data = pad_sequences(sequences, maxlen=max_len)
+
+    return sentences, data
