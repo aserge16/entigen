@@ -1,25 +1,31 @@
 from keras.models import model_from_json
-from semval_data_process import create_training_data
-
-
-model_path = './model.json'
-train_path = "./data/TRAIN_FILE.TXT"
-test_path = "./data/TEST_FILE_FULL.TXT"
-num_words = 20000
-max_len = 100
+from parse_args import ARGS
+from semval_data_process import *
 
 
 def validate():
-    sent_train, sent_test, label_train, label_test, tokenizer = create_training_data(train_path,
-                                                                                    test_path, 
-                                                                                    num_words = num_words, 
-                                                                                    max_len=max_len,
+    sent_train, sent_test, label_train, label_test, tokenizer = create_training_data(ARGS.train_path,
+                                                                                    ARGS.test_path, 
+                                                                                    num_words = ARGS.num_words, 
+                                                                                    max_len=ARGS.max_len,
                                                                                     test_size=0.99)
-    model = load_model(model_path)
+    model = load_model(ARGS.model_path)
     
     print("Testing model...")
     score = model.evaluate(sent_test, label_test, batch_size = 40)
     print("%s: %.2f%%" % (model.metrics_names[1], score[1]*100))
+
+
+def predict():
+    sentences, data = create_model_data(ARGS.data_path, ARGS.num_words, ARGS.max_len)
+    model = load_model(ARGS.model_path)
+
+    predictions = model.predict_classes(data)
+    count = 0
+    for i in predictions:
+        if i != 0:
+            count += 1
+    print(len(predictions), count)
 
 
 def load_model(model_path):
