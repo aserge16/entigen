@@ -3,6 +3,22 @@ from parse_args import ARGS
 from semval_data_process import *
 
 
+# To reproduce, assign prediction values to binary array outputs from
+# create_training_data function
+prediction_values = {
+    0: 'Cause-Effect',
+    1: 'Component-Whole',
+    2: 'Content-Container',
+    3: 'Entity-Destination',
+    4: 'Entity-Origin',
+    5: 'Instrument-Agency',
+    6: 'Member-Collection',
+    7: 'Message-Topic',
+    8: 'Other',
+    9: 'Product-Producer',
+}
+
+
 def validate():
     sent_train, sent_test, label_train, label_test, tokenizer = create_training_data(ARGS.train_path,
                                                                                     ARGS.test_path, 
@@ -21,11 +37,8 @@ def predict():
     model = load_model(ARGS.model_path)
 
     predictions = model.predict_classes(data)
-    count = 0
-    for i in predictions:
-        if i != 0:
-            count += 1
-    print(len(predictions), count)
+
+    return sentences, predictions
 
 
 def load_model(model_path):
@@ -42,4 +55,4 @@ def load_model(model_path):
 
 
 if __name__=='__main__':
-    validate()
+    predict()

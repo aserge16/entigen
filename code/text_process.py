@@ -65,6 +65,9 @@ class TextProcess():
 
         self.ent_sentences = []
         count = 20000
+
+        print("Found %d sentences with request %s" % (len(self.ent_indexes), request))
+        print("Pre-processing sentences")
         for i in self.ent_indexes:
             span = self.doc[i:i+1].sent
             ents = []

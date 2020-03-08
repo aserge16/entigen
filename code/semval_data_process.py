@@ -42,12 +42,6 @@ def create_training_data(train_data_path, test_data_path, num_words, max_len, te
     lb = LabelBinarizer()
     labels = np.array(labels)
     train_labels = lb.fit_transform(labels)
-    seen = {}
-    for i in range(len(labels)):
-        if labels[i] in seen:
-            continue
-        else:
-            seen[labels[i]] = train_labels[i]
 
     sent_train, sent_test, label_train, label_test = train_test_split(train_data , train_labels, test_size=test_size, random_state=42)
 

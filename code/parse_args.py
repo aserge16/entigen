@@ -19,6 +19,8 @@ def parse_args():
                         type=int, help="Max sentence length in data")
     parser.add_argument("--num_words", default=20000,
                         type=int, help="Max number of words to track")
+    parser.add_argument("--num_epochs", default=10,
+                        type=int, help="Number of epochs")
 
     args = parser.parse_args()
     return args

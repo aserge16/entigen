@@ -1,10 +1,10 @@
-from entigen import *
+from entigen import create_model
 from parse_args import ARGS
 from semval_data_process import create_training_data
 from keras.models import model_from_json
 
 
-def train(num_epochs):
+def train():
     sent_train, sent_test, label_train, label_test, tokenizer = create_training_data(ARGS.train_path,
                                                                                     ARGS.test_path, 
                                                                                     num_words = ARGS.num_words, 
@@ -16,7 +16,7 @@ def train(num_epochs):
                         label_len=10,
                         word_index = tokenizer.word_index,
                         embedding_file = None)
-    model.fit(sent_train, label_train, epochs=num_epochs, batch_size = 40)
+    model.fit(sent_train, label_train, epochs=ARGS.num_epochs, batch_size = 40)
 
     print("Training completed")
     print("Testing model...")
@@ -33,4 +33,4 @@ def train(num_epochs):
 
 
 if __name__=='__main__':
-    train(num_epochs=5)
+    train()
