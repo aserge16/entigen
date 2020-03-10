@@ -5,6 +5,7 @@ from keras.models import model_from_json
 
 
 def train():
+    print("Generating train data")
     sent_train, sent_test, label_train, label_test, tokenizer = create_training_data(ARGS.train_path,
                                                                                     ARGS.test_path, 
                                                                                     num_words = ARGS.num_words, 

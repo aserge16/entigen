@@ -4,7 +4,7 @@ from keras.layers import Dense, Embedding, LSTM, Bidirectional
 
 
 def create_model(num_words, embedding_size, max_len, label_len, word_index, embedding_file=None):
-    print("Creating model...")
+    print("Creating model")
     model = Sequential()
 
     # if embedding_file is not None:
