@@ -32,13 +32,13 @@ def validate():
     print("%s: %.2f%%" % (model.metrics_names[1], score[1]*100))
 
 
-def predict():
-    sentences, data = create_model_data(ARGS.data_path, ARGS.num_words, ARGS.max_len)
+def predict(sentences):
+    data = create_model_data(sentences, ARGS.num_words, ARGS.max_len)
     model = load_model(ARGS.model_path)
 
     predictions = model.predict_classes(data)
 
-    return sentences, predictions
+    return predictions
 
 
 def load_model(model_path):

@@ -63,8 +63,7 @@ class TextProcess():
             if ent.text == request:
                 self.ent_indexes.append(ent.start)
 
-        self.ent_sentences = []
-        count = 20000
+        ent_sentences = []
 
         print("Found %d sentences with request %s" % (len(self.ent_indexes), request))
         print("Pre-processing sentences")
@@ -76,22 +75,18 @@ class TextProcess():
                     ents.append(e.text.replace('\n', ' '))
 
             sentence = span.text.replace('\n', ' ')
+            sentence = span.text.replace('\t', ' ')
 
             combinations = list(itertools.combinations(range(len(ents)), 2))
             for i, j in combinations:
                 if (ents[i] == request) or (ents[j] == request):
                     if ents[i] != ents[j]:
                         temp = sentence
-                        temp = str(count) + "\t\"" + temp + "\""
-                        temp = temp.replace(ents[i], "<e1>" + ents[i] + "</e1>", 1)
-                        temp = temp.replace(ents[j], "<e2>" + ents[j] + "</e2>", 1)
-                        temp += "\nOther\n\n\n"
+                        temp = temp.replace(ents[i], "E1_START " + ents[i] + " E1_END", 1)
+                        temp = temp.replace(ents[j], "E2_START " + ents[j] + " E2_END", 1)
+                        ent_sentences.append(temp)
 
-                        self.ent_sentences.append(temp)
-                        count += 1
+        ent_sentences = list(dict.fromkeys(ent_sentences))
+        print("%d sentences with request %s valid and pre-processed" % (len(ent_sentences), request))
 
-        self.ent_sentences = list(dict.fromkeys(self.ent_sentences))
-        
-        with open("./data/temp_sentences.txt", 'w+') as fh:
-            for s in self.ent_sentences:
-                fh.write(s)
+        return ent_sentences

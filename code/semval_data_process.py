@@ -48,13 +48,11 @@ def create_training_data(train_data_path, test_data_path, num_words, max_len, te
     return sent_train, sent_test, label_train, label_test, t
 
 
-def create_model_data(data_path, num_words, max_len):
-    sentences, labels = get_sentences_labels(data_path)
-
+def create_model_data(sentences, num_words, max_len):
     t = Tokenizer(num_words=num_words)
     t.fit_on_texts(sentences)
     sequences = t.texts_to_sequences(sentences)
 
     data = pad_sequences(sequences, maxlen=max_len)
 
-    return sentences, data
+    return data
