@@ -13,6 +13,8 @@ def parse_args():
                         type=str, help="Test data file path")
     parser.add_argument("--data_path", default="./data/temp_sentences.txt",
                         type=str, help="Processed data file path")
+    parser.add_argument("--resources_path", default="../resources/",
+                        type=str, help="Resources file path")
 
     # VALUES
     parser.add_argument("--max_len", default=100,
