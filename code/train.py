@@ -31,7 +31,3 @@ def train():
         json_file.write(model_json)
     model.save_weights("model.h5")
     print("Model saved to disk")
-
-
-if __name__=='__main__':
-    train()

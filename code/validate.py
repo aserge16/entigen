@@ -32,7 +32,7 @@ def validate():
     print("%s: %.2f%%" % (model.metrics_names[1], score[1]*100))
 
 
-def predict(sentences):
+def predict_classes(sentences):
     data = create_model_data(sentences, ARGS.num_words, ARGS.max_len)
     model = load_model(ARGS.model_path)
 
@@ -52,7 +52,3 @@ def load_model(model_path):
     
     loaded_model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
     return loaded_model
-
-
-if __name__=='__main__':
-    predict()
