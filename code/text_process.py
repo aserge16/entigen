@@ -90,3 +90,12 @@ class TextProcess():
         print("%d sentences with request %s valid and pre-processed" % (len(ent_sentences), request))
 
         return ent_sentences
+
+
+    def restore_sentence(sentence):
+        temp = sentence
+        temp = temp.replace("E1_START ", " ")
+        temp = temp.replace(" E1_END", " ")
+        temp = temp.replace("E2_START ", " ")
+        temp = temp.replace(" E2_END", " ")
+        return temp
