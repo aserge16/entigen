@@ -16,6 +16,7 @@ prediction_values = {
     7: 'Message-Topic',
     8: 'Other',
     9: 'Product-Producer',
+    10: "Exit",
 }
 
 

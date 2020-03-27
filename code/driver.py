@@ -74,6 +74,9 @@ def predict():
                     elif sent not in pred_to_sentences[pred]:
                         pred_to_sentences[pred].append(sent)
                 ent_predictions[ent_request] = pred_to_sentences
+                view_pred = input("Do you wish to view the predictions? yes/no: ")
+                if view_pred == "yes":
+                    display_predictions(ent_request, pred_to_sentences)
 
         to_save = input("Do you wish to save all predictions to file? yes/no: ")
         if to_save == "yes":
@@ -87,6 +90,32 @@ def predict():
             print("Predictions saved to " + ARGS.resources_path + "predictions_" + str(pred_count))
         pred_count += 1
 
+
+def display_predictions(ent, pred_to_sentences):
+    print("Displaying predictions for entity %s" % (ent))
+    while True:
+        for key, value in validate.prediction_values.items():
+            print(key, value)
+        idx = int(input("Enter number corresponding with class you wish to view: "))
+        if not 0 <= idx <= 10:
+            print("Incorrect input, please try again")
+            continue
+        elif idx == 10:
+            break
+        else:
+            sentences = pred_to_sentences[idx]
+            count_sent = len(sentences)
+            display = 0
+            print("\n\nTotal sentences for this class is %d" % (count_sent))
+            print("Displaying sentences in batches of 10 \n")
+            while display < count_sent - 1:
+                print(sentences[display])
+                display += 1
+                if display % 10 == 0:
+                    cont = input("Do you wish to display another batch? yes/no: ")
+                    if cont == "no":
+                        break
+            print("\n\n")
 
 
 def train_model():
