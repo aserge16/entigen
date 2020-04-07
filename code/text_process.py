@@ -72,10 +72,10 @@ class TextProcess():
             ents = []
             if len(span.ents) > 1:
                 for e in span.ents:
-                    ents.append(e.text.replace('\n', ' '))
+                    ents.append(e.text)
 
-            sentence = span.text.replace('\n', ' ')
-            sentence = span.text.replace('\t', ' ')
+            sentence = ' '.join(span.text.split())
+            sentence = sentence.replace("\n", "")
 
             combinations = list(itertools.combinations(range(len(ents)), 2))
             for i, j in combinations:
@@ -94,8 +94,8 @@ class TextProcess():
 
     def restore_sentence(sentence):
         temp = sentence
-        temp = temp.replace("E1_START ", " ")
-        temp = temp.replace(" E1_END", " ")
-        temp = temp.replace("E2_START ", " ")
-        temp = temp.replace(" E2_END", " ")
+        temp = temp.replace("E1_START ", "")
+        temp = temp.replace(" E1_END", "")
+        temp = temp.replace("E2_START ", "")
+        temp = temp.replace(" E2_END", "")
         return temp
