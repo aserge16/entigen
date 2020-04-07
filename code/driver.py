@@ -27,9 +27,15 @@ def driver():
             print("Incorrect input, please try again")
 
 
-def predict():
-    pred_count = 0
+def train_model():
+    train.train()
 
+
+def validate_model():
+    validate.validate()
+
+
+def predict():
     entries = os.listdir(ARGS.resources_path)
     entries.append("exit")
 
@@ -42,11 +48,12 @@ def predict():
             print("Exiting predict")
             return
         try:
+            file_name = entries[idx]
             print("Selection: " + entries[idx])
-            if ".pdf" in entries[idx]:
-                data = TextProcess(ARGS.resources_path + entries[idx], PDF=True)
-            elif ".txt" in entries[idx]:
-                data = TextProcess(ARGS.resources_path + entries[idx], PDF=False)
+            if ".pdf" in file_name:
+                data = TextProcess(ARGS.resources_path + file_name, PDF=True)
+            elif ".txt" in file_name:
+                data = TextProcess(ARGS.resources_path + file_name, PDF=False)
             else:
                 print("Unknown file format, please use only .txt or .pdf files")
         except IndexError:
@@ -80,15 +87,14 @@ def predict():
 
         to_save = input("Do you wish to save all predictions to file? yes/no: ")
         if to_save == "yes":
-            with open(ARGS.resources_path + "predictions_" + str(pred_count), "w") as fh:
+            with open(ARGS.resources_path + "predictions_" + file_name, "w") as fh:
                 for ent in ent_predictions:
                     fh.write("\n\n ENTITY - " + ent + "\n")
                     for pred in ent_predictions[ent]:
                         fh.write(validate.prediction_values[pred] + ":\n")
                         for sent in ent_predictions[ent][pred]:
                             fh.write("\t" + sent + "\n")
-            print("Predictions saved to " + ARGS.resources_path + "predictions_" + str(pred_count))
-        pred_count += 1
+            print("Predictions saved to " + ARGS.resources_path + "predictions_" + file_name)
 
 
 def display_predictions(ent, pred_to_sentences):
@@ -103,12 +109,16 @@ def display_predictions(ent, pred_to_sentences):
         elif idx == 10:
             break
         else:
-            sentences = pred_to_sentences[idx]
+            try:
+                sentences = pred_to_sentences[idx]
+            except KeyError:
+                print("No sentences under this class.")
+                continue
             count_sent = len(sentences)
             display = 0
             print("\n\nTotal sentences for this class is %d" % (count_sent))
             print("Displaying sentences in batches of 10 \n")
-            while display < count_sent - 1:
+            while display < count_sent:
                 print(sentences[display])
                 display += 1
                 if display % 10 == 0:
@@ -116,14 +126,6 @@ def display_predictions(ent, pred_to_sentences):
                     if cont == "no":
                         break
             print("\n\n")
-
-
-def train_model():
-    train.train()
-
-
-def validate_model():
-    validate.validate()
 
 
 if __name__=='__main__':
