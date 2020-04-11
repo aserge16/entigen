@@ -12,12 +12,12 @@ def train():
                                                                                     max_len=ARGS.max_len,
                                                                                     test_size=0.15)
     model = create_model(num_words=ARGS.num_words, 
-                        embedding_size=300, 
+                        embedding_size=ARGS.embedding_size,
                         max_len=ARGS.max_len, 
                         label_len=10,
                         word_index = tokenizer.word_index,
-                        embedding_file = None)
-    model.fit(sent_train, label_train, epochs=ARGS.num_epochs, batch_size = 40)
+                        embedding = ARGS.embedding)
+    model.fit(sent_train, label_train, epochs=ARGS.num_epochs, batch_size = ARGS.batch_size)
 
     print("Training completed")
     print("Testing model...")
