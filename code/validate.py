@@ -26,7 +26,7 @@ def validate():
                                                                                     num_words = ARGS.num_words, 
                                                                                     max_len=ARGS.max_len,
                                                                                     test_size=0.99)
-    model = load_model(ARGS.model_path)
+    model = load_model(ARGS.model_path, ARGS.model_weights_path)
     
     print("Testing model...")
     score = model.evaluate(sent_test, label_test, batch_size = 40)
@@ -35,20 +35,20 @@ def validate():
 
 def predict_classes(sentences):
     data = create_model_data(sentences, ARGS.num_words, ARGS.max_len)
-    model = load_model(ARGS.model_path)
+    model = load_model(ARGS.model_path, ARGS.model_weights_path)
 
     predictions = model.predict_classes(data)
 
     return predictions
 
 
-def load_model(model_path):
+def load_model(model_path, model_weights_path):
     print("Loading model from disk...")
 
     with open(model_path, 'r') as fh:
         loaded_model_json = fh.read()
         loaded_model = model_from_json(loaded_model_json)
-        loaded_model.load_weights("model.h5")
+        loaded_model.load_weights(model_weights_path)
         print("Model successfully loaded from disk")
     
     loaded_model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])

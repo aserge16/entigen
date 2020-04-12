@@ -16,10 +16,16 @@ def driver():
         idx = int(input("Enter corresponding numer to action:"))
         if idx == 0:
             predict()
+            print("Predictions completed. Thank you!")
+            return
         elif idx == 1:
             train_model()
+            print("New model trained. Thank you!")
+            return
         elif idx == 2:
             validate_model()
+            print("Model validated. Thank you!")
+            return
         elif idx == 3:
             print("Thank you!")
             return
@@ -102,7 +108,11 @@ def display_predictions(ent, pred_to_sentences):
     while True:
         for key, value in validate.prediction_values.items():
             print(key, value)
-        idx = int(input("Enter number corresponding with class you wish to view: "))
+        try:
+            idx = int(input("Enter number corresponding with class you wish to view: "))
+        except ValueError:
+            print("Please enter only an integer")
+            continue
         if not 0 <= idx <= 10:
             print("Incorrect input, please try again")
             continue
@@ -122,9 +132,10 @@ def display_predictions(ent, pred_to_sentences):
                 print(sentences[display])
                 display += 1
                 if display % 10 == 0:
-                    cont = input("Do you wish to display another batch? yes/no: ")
+                    cont = input("\nDo you wish to display another batch? yes/no: ")
                     if cont == "no":
                         break
+                    print("\n")
             print("\n\n")
 
 
