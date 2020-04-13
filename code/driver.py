@@ -13,7 +13,7 @@ def driver():
         print("\nActions:")
         for i, action in enumerate(actions):
             print(str(i) + " - " + action)
-        idx = int(input("Enter corresponding numer to action:"))
+        idx = int(input("Enter corresponding numer to action: "))
         if idx == 0:
             predict()
             print("Predictions completed. Thank you!")
@@ -49,7 +49,7 @@ def predict():
         print("\nFile selection:")
         for i, file in enumerate(entries):
             print(str(i) + " - " + file)
-        idx = int(input("Enter corresponding number to file selection:"))
+        idx = int(input("Enter corresponding number to file selection: "))
         if idx == len(entries) - 1:
             print("Exiting predict")
             return
@@ -71,21 +71,29 @@ def predict():
 
         ent_request = ""
         while True:
-            ent_request = input("Enter entity, or 'exit' to return: ")
+            ent_request = input("Enter entity ('all' to process all valid sentences), or 'exit' to return: ")
             if ent_request == "exit":
                 break
             if ent_request not in ent_predictions:
                 pred_to_sentences = {}
 
                 ent_sentences = data.ent_preprocess(ent_request)
+                if len(ent_sentences) == 0:
+                    print("Found no sentences with request %s" % (ent_request))
+                    continue
+
                 predictions = validate.predict_classes(ent_sentences)
 
+                total = 0
                 for i, (pred, sent) in enumerate(zip(predictions, ent_sentences)):
                     sent = TextProcess.restore_sentence(sent)
                     if pred not in pred_to_sentences:
                         pred_to_sentences[pred] = [sent]
+                        total += 1
                     elif sent not in pred_to_sentences[pred]:
                         pred_to_sentences[pred].append(sent)
+                        total += 1
+                print("%d sentences with request %s valid and pre-processed" % (total, ent_request))
                 ent_predictions[ent_request] = pred_to_sentences
                 view_pred = input("Do you wish to view the predictions? yes/no: ")
                 if view_pred == "yes":
@@ -100,7 +108,7 @@ def predict():
                         fh.write(validate.prediction_values[pred] + ":\n")
                         for sent in ent_predictions[ent][pred]:
                             fh.write("\t" + sent + "\n")
-            print("Predictions saved to " + ARGS.resources_path + "predictions_" + file_name)
+            print("Predictions saved to " + ARGS.predictions_save_path + "predictions_" + file_name)
 
 
 def display_predictions(ent, pred_to_sentences):

@@ -60,7 +60,7 @@ class TextProcess():
         print("Gathering sentences with entity %s" % (request))
         self.ent_indexes = []
         for ent in self.spans:
-            if ent.text == request:
+            if ent.text == request or request == "all":
                 self.ent_indexes.append(ent.start)
 
         ent_sentences = []
@@ -79,7 +79,7 @@ class TextProcess():
 
             combinations = list(itertools.combinations(range(len(ents)), 2))
             for i, j in combinations:
-                if (ents[i] == request) or (ents[j] == request):
+                if (ents[i] == request) or (ents[j] == request) or request == "all":
                     if ents[i] != ents[j]:
                         temp = sentence
                         temp = temp.replace(ents[i], "E1_START " + ents[i] + " E1_END", 1)
@@ -87,8 +87,6 @@ class TextProcess():
                         ent_sentences.append(temp)
 
         ent_sentences = list(dict.fromkeys(ent_sentences))
-        print("%d sentences with request %s valid and pre-processed" % (len(ent_sentences), request))
-
         return ent_sentences
 
 
