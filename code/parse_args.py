@@ -19,7 +19,7 @@ def parse_args():
                         type=str, help="Resources file path")
     parser.add_argument("--embedding_path", default="./data/glove.840B.300d.txt",
                         type=str, help="Word embedding file path")
-    parser.add_argument("--predictions_save_path", default="../resources/predictions/",
+    parser.add_argument("--predictions_save_path", default="./predictions/",
                         type=str, help="Prediction files save path")
 
     # VALUES
