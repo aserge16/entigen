@@ -22,6 +22,7 @@ class Entigen(tk.Tk):
             self.frames[page_name] = frame
             frame.grid(row=0, column=0, sticky="nsew")
 
+        # START FRAME
         self.show_frame("ProcessTextPage")
 
     def show_frame(self, page_name):
@@ -98,12 +99,80 @@ class PredictionPage(tk.Frame):
                             command=lambda: self.get_entity_sentences(entity_input))
         process_entity.pack()
 
+        self.listbox = tk.Listbox(self)
+        self.listbox.pack()
+
+        delete_entry = tk.Button(self, text="Delete Entity",
+                                command=lambda: self.delete_entity())
+        delete_entry.pack()
+        show_entry = tk.Button(self, text="Show Entity Predictions",
+                                command=lambda: self.show_predictions())
+        show_entry.pack()
+        save_all = tk.Button(self, text="Save predictions",
+                            command=lambda: self.save_all())
+        save_all.pack()
+        back = tk.Button(self, text="Back",
+                            command=lambda: self.back())
+        back.pack()
+
+
+    def delete_entity(self):
+        lb=self.listbox
+        entity = lb.get(tk.ACTIVE).split(" - ")[0]
+
+        del self.ent_predictions[entity]
+        lb.delete(tk.ANCHOR)
+
+
+    def save_all(self):
+        file_name = self.processing_file.get().split()[2]
+        with open(ARGS.resources_path + "predictions_" + file_name, "w") as fh:
+            for ent in self.ent_predictions:
+                fh.write("\n\nENTITY - " + ent + "\n")
+                for pred in self.ent_predictions[ent]:
+                    fh.write(validate.prediction_values[pred] + ":\n")
+                    for sent in self.ent_predictions[ent][pred]:
+                        fh.write("\t" + sent + "\n")
+
+
+    def back(self):
+        self.ent_predictions = {}
+        self.listbox.delete(0, tk.END)
+        self.controller.show_frame("ProcessTextPage")
+
+
+    def show_predictions(self):
+        lb=self.listbox
+        entity = lb.get(tk.ACTIVE).split(" - ")[0]
+        predictions = self.ent_predictions[entity]
+
+        display_string = "ENTITY: " + entity
+        for pred in predictions:
+            display_string += "\n\n" + validate.prediction_values[pred] + ":\n"
+            for sent in predictions[pred]:
+                display_string += " - " + sent + "\n"
+
+        top = tk.Toplevel(self)
+        s = tk.Scrollbar(top)
+        text= tk.Text(top)
+        text.pack(side=tk.LEFT, fill="both", expand=True)
+        s.pack(side=tk.RIGHT, fill=tk.Y)
+        s.config(command=text.yview)
+        text.config(yscrollcommand=s.set)
+        text.insert(tk.END, display_string)
+
 
     def get_entity_sentences(self, entity_input):
         ent_request = entity_input.get()
         if ent_request not in self.ent_predictions:
             pred_to_sentences = {}
             ent_sentences = self.data.ent_preprocess(ent_request)
+            count = len(ent_sentences)
+            self.listbox.insert(tk.END, ent_request + " - " + str(count))
+            if count == 0:
+                self.ent_predictions[ent_request] = pred_to_sentences
+                return
+
             predictions = validate.predict_classes(ent_sentences)
 
             for i, (pred, sent) in enumerate(zip(predictions, ent_sentences)):
@@ -112,7 +181,7 @@ class PredictionPage(tk.Frame):
                     pred_to_sentences[pred] = [sent]
                 elif sent not in pred_to_sentences[pred]:
                     pred_to_sentences[pred].append(sent)
-            print(pred_to_sentences)
+            self.ent_predictions[ent_request] = pred_to_sentences
 
 
 if __name__ == "__main__":
