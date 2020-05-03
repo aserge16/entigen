@@ -57,6 +57,7 @@ class TextProcess():
 
 
     def ent_preprocess(self, request):
+        request = request.strip()
         print("Gathering sentences with entity %s" % (request))
         self.ent_indexes = []
         for ent in self.spans:
@@ -64,8 +65,11 @@ class TextProcess():
                 self.ent_indexes.append(ent.start)
 
         ent_sentences = []
+        sentence_total = len(self.ent_indexes)
 
-        print("Found %d sentences with request %s" % (len(self.ent_indexes), request))
+        print("Found %d sentences with request %s" % (sentence_total, request))
+        if sentence_total == 0:
+            return ent_sentences
         print("Pre-processing sentences")
         for i in self.ent_indexes:
             span = self.doc[i:i+1].sent
