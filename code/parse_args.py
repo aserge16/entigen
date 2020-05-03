@@ -5,9 +5,9 @@ def parse_args():
     parser = ArgumentParser()
 
     # FILES
-    parser.add_argument("--model_path", default="./model.json",
+    parser.add_argument("--model_path", default="./models/model.json",
                         type=str, help="Model file path")
-    parser.add_argument("--model_weights_path", default="./model.h5",
+    parser.add_argument("--model_weights_path", default="./models/model.h5",
                         type=str, help="Model weights file path")
     parser.add_argument("--train_path", default="./data/TRAIN_FILE.TXT",
                         type=str, help="Train data file path")
