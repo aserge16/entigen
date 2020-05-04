@@ -1,6 +1,8 @@
 # entigen
-# Aleksandr Sergeev
+## Aleksandr Sergeev
 Final project for my computer science major at Earlham College.
+
+[ --> Project Paper](https://www.overleaf.com/8823925963hjqntbvwmptf)</br>
 
 python3 packages required are found in requirements.txt
 
@@ -15,14 +17,14 @@ There is a pre-trained model with the code, trained over 20 epochs and using an 
 All arguements can be changed in the parse_args.py file.
 
 
---- Using the Driver File ---
+## Using the Driver File
 
  There is a file, driver.py, which lets the you train, validate, and classify sentences through the terminal. To run this, you need to change your current terminal directory to the code subdirectory and use the command '$ python driver.py'.
 
---- Using the GUI ---
+## Using the GUI
 
  If you want to use the interactive GUI for predictions, you simply have to run '$ python gui_main.py' in the code subdirectory.
 
---- PyInstaller ---
+## PyInstaller
 
  PyInstaller is a libary that you can use to bundle the whole GUI into an executable. You will need to first install PyInstaller.
