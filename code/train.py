@@ -21,7 +21,7 @@ def train():
 
     print("Training completed")
     print("Testing model...")
-    score = model.evaluate(sent_test, label_test, batch_size = 40)
+    score = model.evaluate(sent_test, label_test, batch_size = ARGS.batch_size)
     print("%s: %.2f%%" % (model.metrics_names[1], score[1]*100))
 
     print("Saving model to disk...")
