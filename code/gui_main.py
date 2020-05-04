@@ -5,6 +5,12 @@ import tkinter as tk
 import os
 
 
+font_text = ("Helvetica", 13)
+font_label = ("Helvetica", 15)
+font_label2 = ("Helvetica", 14)
+font_button = ("Helvetica", 13, "italic")
+
+
 class Entigen(tk.Tk):
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
@@ -54,16 +60,18 @@ class ProcessTextPage(tk.Frame):
         self.controller = controller
         files = os.listdir(ARGS.resources_path)
 
-        select_label = tk.Label(self, text="Select .pdf/.txt file to process").pack()
+        select_label = tk.Label(self, text="Select .pdf/.txt file to process",
+                                font=font_label).pack()
+        self.listbox = tk.Listbox(self, font=font_text,
+                    width=40, height=20)
+        self.listbox.pack()
 
-        var = tk.StringVar()
         for file in files:
-            if ".pdf" in file or ".txt" in file:   
-                rb = tk.Radiobutton(self, text=file, value=file, variable=var)
-                rb.pack()
+            if ".pdf" in file or ".txt" in file:
+                self.listbox.insert(tk.END, file)
         
-        process_button = tk.Button(self, text="Process selected file",
-                                    command=lambda: self.preprocess_file(var.get()))
+        process_button = tk.Button(self, text="Process selected file", font=font_button,
+                                    command=lambda: self.preprocess_file(self.listbox.get(tk.ACTIVE)))
         process_button.pack()
 
 
@@ -89,29 +97,31 @@ class PredictionPage(tk.Frame):
         self.data = None
         self.ent_predictions = {}
 
-        file_name = tk.Label(self, textvariable=self.processing_file).pack()
+        file_name = tk.Label(self, textvariable=self.processing_file,
+                            font=font_label).pack()
 
-        entity = tk.Label(self, text="Entity Name").pack()
-        entity_input = tk.Entry(self)
+        entity = tk.Label(self, text="Entity Name", font=font_label2).pack()
+        entity_input = tk.Entry(self, font=font_text)
         entity_input.pack()
 
-        process_entity = tk.Button(self, text="Process entity", 
+        process_entity = tk.Button(self, text="Process entity", font=font_button,
                             command=lambda: self.get_entity_sentences(entity_input))
         process_entity.pack()
 
-        self.listbox = tk.Listbox(self)
+        self.listbox = tk.Listbox(self, font=font_text,
+                    width=40, height=20)
         self.listbox.pack()
 
-        delete_entry = tk.Button(self, text="Delete Entity",
+        delete_entry = tk.Button(self, text="Delete Entity", font=font_button,
                                 command=lambda: self.delete_entity())
         delete_entry.pack()
-        show_entry = tk.Button(self, text="Show Entity Predictions",
+        show_entry = tk.Button(self, text="Show Entity Predictions", font=font_button,
                                 command=lambda: self.show_predictions())
         show_entry.pack()
-        save_all = tk.Button(self, text="Save predictions",
+        save_all = tk.Button(self, text="Save Predictions to File", font=font_button,
                             command=lambda: self.save_all())
         save_all.pack()
-        back = tk.Button(self, text="Back",
+        back = tk.Button(self, text="Back", font=font_button,
                             command=lambda: self.back())
         back.pack()
 
@@ -126,7 +136,7 @@ class PredictionPage(tk.Frame):
 
     def save_all(self):
         file_name = self.processing_file.get().split()[2]
-        with open(ARGS.resources_path + "predictions_" + file_name, "w") as fh:
+        with open(ARGS.resources_path + "predictions/pred_" + file_name, "w") as fh:
             for ent in self.ent_predictions:
                 fh.write("\n\nENTITY - " + ent + "\n")
                 for pred in self.ent_predictions[ent]:
@@ -154,7 +164,7 @@ class PredictionPage(tk.Frame):
 
         top = tk.Toplevel(self)
         s = tk.Scrollbar(top)
-        text= tk.Text(top)
+        text= tk.Text(top, font=font_text)
         text.pack(side=tk.LEFT, fill="both", expand=True)
         s.pack(side=tk.RIGHT, fill=tk.Y)
         s.config(command=text.yview)
