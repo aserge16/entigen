@@ -2,7 +2,7 @@
 ## Aleksandr Sergeev
 Final project for my computer science major at Earlham College.
 
-[ --> Project Paper](https://www.overleaf.com/8823925963hjqntbvwmptf)</br>
+[ --> Project Paper](https://portfolios.cs.earlham.edu/wp-content/uploads/2020/05/Project_Paper__Final.pdf)</br>
 
 python3 packages required are found in requirements.txt
 
